@@ -19,6 +19,7 @@ namespace API.Mappers
                     Color = tShirtModel.Color,
                     Season = tShirtModel.Season,
                     Prize = tShirtModel.Prize,
+                    Reviews = tShirtModel.Reviews.Select(x => x.ToReviewDto()).ToList()
                 };
         }
 

@@ -41,12 +41,13 @@ namespace API.Repository
 
         public async Task<List<TShirt>> GetAllAsync()
         {
-            return await _merch.TShirts.ToListAsync();
+            return await _merch.TShirts.Include(x => x.Reviews).ToListAsync();
         }
 
         public async Task<TShirt?> GetByIdAsync(int id)
         {
-            return await _merch.TShirts.FindAsync(id);
+            return await _merch.TShirts.Include(s => s.Reviews).FirstOrDefaultAsync(p => p.Id == id); //Get unique Ids
+
         }
 
         public async Task<bool> TshirtExists(int id)
@@ -57,6 +58,7 @@ namespace API.Repository
         public async Task<TShirt?> UpdateAsync(int id, UpdateTshirtDto updateTshirtDto)
         {
             var existingTshirt = await _merch.TShirts.FirstOrDefaultAsync(x => x.Id == id);
+            
             if(existingTshirt == null)
             {
                 return null;

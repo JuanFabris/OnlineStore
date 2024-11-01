@@ -15,7 +15,6 @@ namespace API.Models
         
         [Column(TypeName = "decimal(18,2)")]
         public decimal Prize { get; set; }
-        
-        public List <Review> Reviews = new List<Review>();
+        public List <Review> Reviews {get ; set;} = new List<Review>();
     }
 }

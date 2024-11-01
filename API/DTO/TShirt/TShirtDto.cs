@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using API.DTO.Review;
 using API.Models;
 
 namespace API.DTO
@@ -16,6 +17,6 @@ namespace API.DTO
         
         [Column(TypeName = "decimal(18,2)")]
         public decimal Prize { get; set; }
-        public List <Review> Reviews { get; set; }
+        public List<ReviewDto> Reviews { get; set; }
     }
 }
