@@ -24,6 +24,11 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll ()
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var review = await _reviewRepository.GetAllAsync();
 
             var reviewDto = review.Select(x => x.ToReviewDto());
@@ -34,6 +39,12 @@ namespace API.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById ([FromRoute] int id)
         {
+            
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var review = await _reviewRepository.GetByIdAsync(id);
 
             if(review == null)
@@ -47,6 +58,12 @@ namespace API.Controllers
         [HttpPost("{tshirtId}")]
         public async Task<IActionResult> Create ([FromRoute] int tshirtId, CreateReviewDto reviewDto)
         {
+            
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if(!await _tShirtRepository.TshirtExists(tshirtId))
             {
                 return BadRequest("Didn't find any corrisponding ID");
@@ -61,6 +78,12 @@ namespace API.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Update ([FromRoute] int id, [FromBody] UpdateReview updateReview)
         {
+            
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var review = await _reviewRepository.UpdateAsync(id, updateReview.ToUpdateReview());
             if(review == null)
             {
@@ -73,6 +96,12 @@ namespace API.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Delete ([FromRoute] int id)
         {
+         
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
             var review = await _reviewRepository.DeleteAsync(id);
             if(review == null)
             {

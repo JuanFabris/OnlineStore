@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.DTO;
+using API.HelperToQuery;
 using API.Models;
 
 namespace API.Interfaces
 {
     public interface ITShirtRepository
     {
-        Task<List<TShirt>> GetAllAsync ();
+        Task<List<TShirt>> GetAllAsync (QueryObject queryObject);
         Task<TShirt?> GetByIdAsync (int id);
         Task<TShirt> CreateAsync (TShirt tShirtModel);
         Task<TShirt?> UpdateAsync (int id, UpdateTshirtDto updateTshirtDto);
