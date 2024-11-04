@@ -17,6 +17,6 @@ namespace API.Interfaces
         Task<TShirt?> UpdateAsync (int id, UpdateTshirtDto updateTshirtDto);
         Task<TShirt?> DeleteAsync (int id);
         Task<bool> TshirtExists (int id);
-        
+          
     }
 }
