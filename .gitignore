@@ -44,3 +44,6 @@ msbuild.wrn
 
 API/appsettings.json
 API/appsettings.Development.json
+
+bin/
+obj/
