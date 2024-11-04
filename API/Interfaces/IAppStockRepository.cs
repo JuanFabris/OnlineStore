@@ -9,5 +9,7 @@ namespace API.Interfaces
     public interface IAppStockRepository
     {
         Task <List<TShirt>> GetUserStock (AppUser user);
+        Task <AppStock> CreateAsync (AppStock appStock);
+        Task <AppStock> DeleteStock (AppUser appUser, string brand);
     }
 }

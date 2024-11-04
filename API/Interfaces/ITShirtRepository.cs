@@ -12,6 +12,7 @@ namespace API.Interfaces
     {
         Task<List<TShirt>> GetAllAsync (QueryObject queryObject);
         Task<TShirt?> GetByIdAsync (int id);
+        Task<TShirt?> GetByBrandAsync(string brand);
         Task<TShirt> CreateAsync (TShirt tShirtModel);
         Task<TShirt?> UpdateAsync (int id, UpdateTshirtDto updateTshirtDto);
         Task<TShirt?> DeleteAsync (int id);

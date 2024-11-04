@@ -72,6 +72,11 @@ namespace API.Repository
             return await tshirt.ToListAsync();
         }
 
+        public async Task<TShirt?> GetByBrandAsync(string brand)
+        {
+            return await _merch.TShirts.FirstOrDefaultAsync(x => x.Brand == brand);
+        }
+
         public async Task<TShirt?> GetByIdAsync(int id)
         {
             return await _merch.TShirts.Include(s => s.Reviews).FirstOrDefaultAsync(p => p.Id == id); //Get unique Ids

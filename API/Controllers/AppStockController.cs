@@ -29,10 +29,69 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> GetUserStock ()
         {
-            var username = User.GetUSername();
+            var username = User.GetUsername();
             var appUser = await _userManager.FindByNameAsync(username);
             var userAppStock = await _stockRepository.GetUserStock(appUser);
             return Ok(userAppStock);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddUserStock(string brand)
+        {
+            var username = User.GetUsername();
+            var appUser = await _userManager.FindByNameAsync(username);
+            var stock = await _tShirtRepo.GetByBrandAsync(brand);
+
+            if(stock == null)
+            {
+                return BadRequest("Stock Not Found");
+            }
+
+            var userStock = await _stockRepository.GetUserStock(appUser);
+
+            if(userStock.Any(e => e.Brand.ToLower() == brand.ToLower())) return BadRequest("Cannot add same stock");
+
+            var userStockModel = new AppStock
+            {
+                TShirtId = stock.Id,
+                AppUserId =appUser.Id
+            };
+
+            await _stockRepository.CreateAsync(userStockModel);
+
+            if(userStockModel == null)
+            {
+                return StatusCode(500, "Could Not Create");
+            }
+            else
+            {
+                return Created();
+            }
+
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteUserStock (string brand)
+        {
+            var username = User.GetUsername();
+            var appUser = await _userManager.FindByNameAsync(username);
+
+            var userStock = await _stockRepository.GetUserStock(appUser);
+
+            var filterStock = userStock.Where(b => b.Brand.ToLower() == brand.ToLower()).ToList();
+
+            if(filterStock.Count() == 1)
+            {
+                await _stockRepository.DeleteStock(appUser, brand);
+            }
+            else
+            {
+                return BadRequest("Stock is not in your Portfolio");
+            }
+
+            return Ok();
         }
     }
 }

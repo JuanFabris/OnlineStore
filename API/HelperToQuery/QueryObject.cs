@@ -15,3 +15,4 @@ namespace API.HelperToQuery
         public bool IsDecsending { get; set; } = false;
     }
 }
+

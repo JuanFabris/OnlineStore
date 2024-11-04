@@ -14,5 +14,7 @@ namespace API.Models
         public string Description { get; set; } = string.Empty;
         public int? TshirtId { get; set; }
         public TShirt? TShirt { get; set; }
+        public string AppUserId { get;  set; }
+        public AppUser AppUser { get; set; }
     }
 }
