@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Database;
 using API.DTO.Review;
+using API.HelperToQuery;
 using API.Interfaces;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,9 +18,22 @@ namespace API.Repository
         {
             _rev = rev;
         }
-        public async Task<List<Review>> GetAllAsync()
+        public async Task<List<Review>> GetAllAsync(ReviewQueryObject queryObject)
         {
-            return await _rev.Reviews.Include(r => r.AppUser).ToListAsync();
+            var reviews = _rev.Reviews.Include(r => r.AppUser).AsQueryable();
+            
+            if(!string.IsNullOrWhiteSpace(queryObject.Brand))
+            {
+                reviews = reviews.Where(s => s.TShirt.Brand == queryObject.Brand);
+            }
+
+            if(queryObject.isDecsending == true)
+            {
+                reviews = reviews.OrderByDescending(r => r.Rating);
+            }
+
+            return await reviews.ToListAsync();
+         
         }
 
         public async Task<Review?> GetByIdAsync(int id)

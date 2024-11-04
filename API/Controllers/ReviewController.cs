@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.DTO.Review;
 using API.Extensions;
+using API.HelperToQuery;
 using API.Interfaces;
 using API.Mappers;
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,14 +29,15 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll ()
+        [Authorize]
+        public async Task<IActionResult> GetAll ([FromQuery] ReviewQueryObject queryObject)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var review = await _reviewRepository.GetAllAsync();
+            var review = await _reviewRepository.GetAllAsync(queryObject);
 
             var reviewDto = review.Select(x => x.ToReviewDto());
 
