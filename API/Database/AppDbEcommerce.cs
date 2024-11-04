@@ -46,7 +46,7 @@ namespace API.Database
                 },
                 new IdentityRole
                 {
-                    Name = "USer",
+                    Name = "User",
                     NormalizedName = "USER"
                 }
             };

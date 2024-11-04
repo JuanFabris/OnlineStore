@@ -50,4 +50,6 @@ obj/
 
 Properties/
 
+Service/FMPService.cs
+
 .fake

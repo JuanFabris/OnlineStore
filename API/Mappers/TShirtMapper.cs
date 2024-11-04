@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.DTO;
+using API.DTO.TShirt;
 using API.Models;
 
 namespace API.Mappers
@@ -31,6 +32,17 @@ namespace API.Mappers
                     Color = tShirtDto.Color,
                     Season = tShirtDto.Season,
                     Prize = tShirtDto.Prize,
+            };
+        }
+
+        public static TShirt ToTShirtFromFMP(this FMPTShirt fmpTShirt)
+        {
+            return new TShirt
+            {
+                Brand = fmpTShirt.brand,
+                Season = fmpTShirt.season,
+                Prize = (decimal)fmpTShirt.prize,
+                Color = fmpTShirt.color
             };
         }
 
