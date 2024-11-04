@@ -44,7 +44,7 @@ namespace API.Repository
 
         public async Task<List<TShirt>> GetAllAsync(QueryObject queryObject)
         {
-            var tshirt = _merch.TShirts.Include(x => x.Reviews).AsQueryable();
+            var tshirt = _merch.TShirts.Include(x => x.Reviews).ThenInclude(a => a.AppUser).AsQueryable();
             
             //filter
             if(!string.IsNullOrWhiteSpace(queryObject.Brand))

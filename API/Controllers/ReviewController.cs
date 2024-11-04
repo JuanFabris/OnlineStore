@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.DTO.Review;
+using API.Extensions;
 using API.Interfaces;
 using API.Mappers;
+using API.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -15,10 +18,12 @@ namespace API.Controllers
     {
         private readonly IReviewRepository _reviewRepository;
         private readonly ITShirtRepository _tShirtRepository;
-        public ReviewController(IReviewRepository reviewRepository, ITShirtRepository tShirtRepository)
+        private readonly UserManager<AppUser> _userManager;
+        public ReviewController(IReviewRepository reviewRepository, ITShirtRepository tShirtRepository, UserManager<AppUser> userManager)
         {
             _reviewRepository = reviewRepository;
             _tShirtRepository = tShirtRepository;
+            _userManager = userManager;
         }
 
         [HttpGet]
@@ -33,7 +38,7 @@ namespace API.Controllers
 
             var reviewDto = review.Select(x => x.ToReviewDto());
 
-            return Ok(review);
+            return Ok(reviewDto);
         }
 
         [HttpGet("{id:int}")]
@@ -69,7 +74,11 @@ namespace API.Controllers
                 return BadRequest("Didn't find any corrisponding ID");
             }
 
+            var username = User.GetUsername();
+            var appUser = await _userManager.FindByNameAsync(username);
+
             var reviewModel = reviewDto.ToCreateReview(tshirtId);
+            reviewModel.AppUserId = appUser.Id;
             await _reviewRepository.CreateAsync(reviewModel);
             return CreatedAtAction(nameof(GetById), new {id = reviewModel.Id}, reviewModel.ToReviewDto());
         }

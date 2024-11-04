@@ -16,6 +16,7 @@ namespace API.Mappers
                 Id = reviewModel.Id,
                 Rating = reviewModel.Rating,
                 Description = reviewModel.Description,
+                CreatedBy = reviewModel.AppUser.UserName,
                 TshirtId = reviewModel.TshirtId,
             };
         }

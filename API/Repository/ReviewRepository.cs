@@ -19,12 +19,12 @@ namespace API.Repository
         }
         public async Task<List<Review>> GetAllAsync()
         {
-            return await _rev.Reviews.ToListAsync();
+            return await _rev.Reviews.Include(r => r.AppUser).ToListAsync();
         }
 
         public async Task<Review?> GetByIdAsync(int id)
         {
-            return await _rev.Reviews.FindAsync(id);
+            return await _rev.Reviews.Include(r => r.AppUser).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Review> CreateAsync (Review reviewModel)

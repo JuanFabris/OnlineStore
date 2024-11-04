@@ -32,9 +32,9 @@ namespace API.Controllers
 
             var tShirt = await _tShirtRepo.GetAllAsync(queryObject);
 
-            var tshirtDto = tShirt.Select(t => t.IntoTShirtDto());
+            var tshirtDto = tShirt.Select(t => t.IntoTShirtDto()).ToList();
 
-            return Ok(tShirt);
+            return Ok(tshirtDto);
         }
 
         [HttpGet("{id:int}")]
