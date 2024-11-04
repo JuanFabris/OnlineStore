@@ -4,6 +4,7 @@ using API.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbEcommerce))]
-    partial class AppDbEcommerceModelSnapshot : ModelSnapshot
+    [Migration("20241103232852_AppStockManyToMany")]
+    partial class AppStockManyToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,12 +30,12 @@ namespace API.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("TShirtId")
+                    b.Property<int>("TshirtId")
                         .HasColumnType("int");
 
-                    b.HasKey("AppUserId", "TShirtId");
+                    b.HasKey("AppUserId", "TshirtId");
 
-                    b.HasIndex("TShirtId");
+                    b.HasIndex("TshirtId");
 
                     b.ToTable("AppStock");
                 });
@@ -152,7 +155,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TShirts");
+                    b.ToTable("TShirt");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -184,13 +187,13 @@ namespace API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8be39ffc-c052-4e00-8394-d0b9d54b1478",
+                            Id = "9c9801b9-64d0-4034-81b5-3f0518f64a7b",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "e3426b52-1fcd-454b-a7c2-2f81552fc9ab",
+                            Id = "6cb37b59-48cd-49de-bb32-c2cdc9984925",
                             Name = "USer",
                             NormalizedName = "USER"
                         });
@@ -312,7 +315,7 @@ namespace API.Migrations
 
                     b.HasOne("API.Models.TShirt", "TShirt")
                         .WithMany("AppStocks")
-                        .HasForeignKey("TShirtId")
+                        .HasForeignKey("TshirtId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

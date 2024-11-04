@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace API.Models
 {
+    [Table("TShirts")]
     public class TShirt
     {
         public int Id { get; set; }
@@ -16,5 +17,6 @@ namespace API.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Prize { get; set; }
         public List <Review> Reviews {get ; set;} = new List<Review>();
+        public List <AppStock> AppStocks {get ; set;} = new List<AppStock>();
     }
 }

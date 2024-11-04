@@ -91,6 +91,7 @@ builder.Services.AddAuthentication(options => {
 builder.Services.AddScoped<ITShirtRepository, TShirtRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAppStockRepository, AppStockRepository>();
 
 var app = builder.Build();
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbEcommerce))]
-    [Migration("20241102135453_Authentication")]
-    partial class Authentication
+    [Migration("20241104001437_UpdateTable")]
+    partial class UpdateTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,21 @@ namespace API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("API.Models.AppStock", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("TShirtId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AppUserId", "TShirtId");
+
+                    b.HasIndex("TShirtId");
+
+                    b.ToTable("AppStock");
+                });
 
             modelBuilder.Entity("API.Models.AppUser", b =>
                 {
@@ -172,13 +187,13 @@ namespace API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e2d4d5c6-84d3-48c3-887a-c60c8c96b69d",
+                            Id = "8be39ffc-c052-4e00-8394-d0b9d54b1478",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "271d1dab-bd17-4547-a4be-94aae2b924a1",
+                            Id = "e3426b52-1fcd-454b-a7c2-2f81552fc9ab",
                             Name = "USer",
                             NormalizedName = "USER"
                         });
@@ -290,6 +305,25 @@ namespace API.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("API.Models.AppStock", b =>
+                {
+                    b.HasOne("API.Models.AppUser", "AppUser")
+                        .WithMany("AppStocks")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.TShirt", "TShirt")
+                        .WithMany("AppStocks")
+                        .HasForeignKey("TShirtId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+
+                    b.Navigation("TShirt");
+                });
+
             modelBuilder.Entity("API.Models.Review", b =>
                 {
                     b.HasOne("API.Models.TShirt", "TShirt")
@@ -350,8 +384,15 @@ namespace API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("API.Models.AppUser", b =>
+                {
+                    b.Navigation("AppStocks");
+                });
+
             modelBuilder.Entity("API.Models.TShirt", b =>
                 {
+                    b.Navigation("AppStocks");
+
                     b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618

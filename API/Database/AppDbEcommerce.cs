@@ -19,10 +19,23 @@ namespace API.Database
 
         public DbSet<TShirt> TShirts { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<AppStock> AppStocks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<AppStock>(x => x.HasKey(a => new {a.AppUserId, a.TShirtId}));
+            
+            builder.Entity<AppStock>()
+                .HasOne(u => u.AppUser)
+                .WithMany(u => u.AppStocks)
+                .HasForeignKey(t => t.AppUserId);
+
+            builder.Entity<AppStock>()
+                .HasOne(u => u.TShirt)
+                .WithMany(u => u.AppStocks)
+                .HasForeignKey(t => t.TShirtId);
 
             List<IdentityRole> roles = new List<IdentityRole>
             {
