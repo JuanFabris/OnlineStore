@@ -21,11 +21,14 @@ namespace API.Controllers
         private readonly IReviewRepository _reviewRepository;
         private readonly ITShirtRepository _tShirtRepository;
         private readonly UserManager<AppUser> _userManager;
-        public ReviewController(IReviewRepository reviewRepository, ITShirtRepository tShirtRepository, UserManager<AppUser> userManager)
+        private readonly IFMPService _fMPService;
+
+        public ReviewController(IReviewRepository reviewRepository, ITShirtRepository tShirtRepository, UserManager<AppUser> userManager, IFMPService fMPService)
         {
             _reviewRepository = reviewRepository;
             _tShirtRepository = tShirtRepository;
             _userManager = userManager;
+            _fMPService = fMPService;
         }
 
         [HttpGet]
@@ -63,8 +66,8 @@ namespace API.Controllers
             return Ok(review.ToReviewDto());
         }
 
-        [HttpPost("{tshirtId}")]
-        public async Task<IActionResult> Create ([FromRoute] int tshirtId, CreateReviewDto reviewDto)
+        [HttpPost("{brand:alpha}")]
+        public async Task<IActionResult> Create ([FromRoute] string brand, CreateReviewDto reviewDto)
         {
             
             if(!ModelState.IsValid)
@@ -72,15 +75,25 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if(!await _tShirtRepository.TshirtExists(tshirtId))
+            var tshirt = await _tShirtRepository.GetByBrandAsync(brand);
+
+            if(tshirt == null)
             {
-                return BadRequest("Didn't find any corrisponding ID");
+                tshirt = await _fMPService.FindTShirtByBrandAsync(brand);
+                if(tshirt == null)
+                {
+                    return BadRequest("This tshirt does not exists");
+                }
+                else
+                {
+                    await _tShirtRepository.CreateAsync(tshirt);
+                }
             }
 
             var username = User.GetUsername();
             var appUser = await _userManager.FindByNameAsync(username);
 
-            var reviewModel = reviewDto.ToCreateReview(tshirtId);
+            var reviewModel = reviewDto.ToCreateReview(tshirt.Id);
             reviewModel.AppUserId = appUser.Id;
             await _reviewRepository.CreateAsync(reviewModel);
             return CreatedAtAction(nameof(GetById), new {id = reviewModel.Id}, reviewModel.ToReviewDto());

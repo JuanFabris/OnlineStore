@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.Extensions;
 using API.Interfaces;
 using API.Models;
+using API.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +18,14 @@ namespace API.Controllers
     private readonly UserManager<AppUser> _userManager;
     private readonly ITShirtRepository _tShirtRepo;
     private readonly IAppStockRepository _stockRepository;
+    private readonly IFMPService _fMPService;
     
-        public AppStockController(UserManager<AppUser> userManager, ITShirtRepository tShirtRepo, IAppStockRepository stockRepository)
+        public AppStockController(UserManager<AppUser> userManager, ITShirtRepository tShirtRepo, IAppStockRepository stockRepository, IFMPService fMPService)
         {
             _userManager = userManager;
             _tShirtRepo = tShirtRepo;
             _stockRepository = stockRepository;
+            _fMPService = fMPService;
         }
 
         [HttpGet]
@@ -41,9 +44,22 @@ namespace API.Controllers
         {
             var username = User.GetUsername();
             var appUser = await _userManager.FindByNameAsync(username);
-            var stock = await _tShirtRepo.GetByBrandAsync(brand);
+            var tshirt = await _tShirtRepo.GetByBrandAsync(brand);
 
-            if(stock == null)
+            if(tshirt == null)
+            {
+                tshirt = await _fMPService.FindTShirtByBrandAsync(brand);
+                if(tshirt == null)
+                {
+                    return BadRequest("This tshirt does not exists");
+                }
+                else
+                {
+                    await _tShirtRepo.CreateAsync(tshirt);
+                }
+            }
+
+            if(tshirt == null)
             {
                 return BadRequest("Stock Not Found");
             }
@@ -54,7 +70,7 @@ namespace API.Controllers
 
             var userStockModel = new AppStock
             {
-                TShirtId = stock.Id,
+                TShirtId = tshirt.Id,
                 AppUserId =appUser.Id
             };
 
