@@ -1,8 +1,8 @@
 using API.Database;
-using API.Interfaces;
+using API.Interface;
 using API.Models;
 using API.Repository;
-using API.Service;
+//using API.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -50,21 +50,21 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 });
 
-builder.Services.AddDbContext<AppDbEcommerce>(options =>
+builder.Services.AddDbContext<AppDbGoal5>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 });
 
 //password 
-builder.Services.AddIdentity<AppUser, IdentityRole>(options => {
+builder.Services.AddIdentity<User, IdentityRole>(options => {
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequiredLength = 12;
 })
-.AddEntityFrameworkStores<AppDbEcommerce>();
+.AddEntityFrameworkStores<AppDbGoal5>();
 
 //add scheme
 builder.Services.AddAuthentication(options => {
@@ -87,11 +87,6 @@ builder.Services.AddAuthentication(options => {
         )
     };
 });
-
-builder.Services.AddScoped<ITShirtRepository, TShirtRepository>();
-builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IAppStockRepository, AppStockRepository>();
 
 var app = builder.Build();
 
