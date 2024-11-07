@@ -1,3 +1,4 @@
+using API.DTOs.AvatarSkill;
 using API.Models;
 
 public class AvatarDto
@@ -10,6 +11,5 @@ public class AvatarDto
     public decimal Height { get; set; }
     public decimal Weight { get; set; }
     public int Experience { get; set; }
-    
-    //public List<AvatarSkillDto> Skills { get; set; } = new List<AvatarSkillDto>();
+    public List<AvatarSkillDto> Skills { get; set; } = new List<AvatarSkillDto>();
 }
