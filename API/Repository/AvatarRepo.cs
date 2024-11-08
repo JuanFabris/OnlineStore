@@ -16,16 +16,17 @@ namespace API.Repository
         public AvatarRepo(AppDbGoal5 context)
         {
             _context = context;
+            
         }
 
         public async Task<List<Avatar>> GetAllAsync()
         {
-            return await _context.Avatars.ToListAsync();
+            return await _context.Avatars.Include(x => x.Skill).ToListAsync();
         }
 
         public async Task<Avatar?> GetByIdAsync(int id)
         {
-            return await _context.Avatars.FindAsync(id);
+            return await _context.Avatars.Include(x => x.Skill).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Avatar> CreateAsync(Avatar avatarModel)

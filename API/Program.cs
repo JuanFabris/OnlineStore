@@ -58,6 +58,7 @@ builder.Services.AddDbContext<AppDbGoal5>(options =>
 });
 
 builder.Services.AddScoped<IAvatarRepo, AvatarRepo>();
+builder.Services.AddScoped<IAvatarSkillRepo, AvatarSkillRepo>();
 
 //password 
 // builder.Services.AddIdentity<User, IdentityRole>(options => {

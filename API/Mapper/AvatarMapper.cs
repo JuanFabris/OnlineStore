@@ -21,7 +21,7 @@ namespace API.Mapper
                 Height = avatarModel.Height,
                 Weight = avatarModel.Weight,
                 Experience = avatarModel.Experience,
-                //Skills = avatarModel.Skill.Select(x => x.toSkillDto())
+                Skills = avatarModel.Skill.Select(x => x.ToSkillDto()).ToList()
             };
         }
 
