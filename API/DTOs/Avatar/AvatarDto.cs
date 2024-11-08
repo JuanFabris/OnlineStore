@@ -28,6 +28,5 @@ public class AvatarDto
 
     [Range(0, 50, ErrorMessage = "Experience must be between 0 and 50 years")]
     public int Experience { get; set; }
-
     public List<AvatarSkillDto> Skills { get; set; } = new List<AvatarSkillDto>();
 }
