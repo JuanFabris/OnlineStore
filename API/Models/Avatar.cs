@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace API.Models
 {
@@ -28,7 +29,28 @@ namespace API.Models
         public bool PlayOtherRoles { get; set; }
         public decimal Height { get; set; }
         public decimal Weight { get; set; }
-        public int Experience { get; set; }
+        
+        //public int Experience { get; set; }
+        public int Rating
+        {
+            get
+            {
+                if (Skill == null || !Skill.Any())
+                {
+                    return 0;
+                }
+
+                var Skills = Skill.SelectMany(s => new int []
+                {
+                    s.Speed, s.Strength, s.Stamina, s.Agility, s.Balance,
+                    s.Attack, s.Dribbling, s.Shooting, s.BallControll,
+                    s.Passing, s.Defense, s.Marking, s.Tackling,
+                    // s.Diving, s.Handling, s.Reflexes
+                });
+
+                return (int)Skills.Average();
+            }
+        }
         public List<AvatarSkill> Skill { get; set; } = new List<AvatarSkill>();
     }
 }

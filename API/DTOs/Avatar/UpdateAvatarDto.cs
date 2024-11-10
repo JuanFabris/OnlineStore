@@ -18,7 +18,7 @@ namespace API.DTOs.Avatar
     [Range(30.0, 200.0, ErrorMessage = "Oh dear..")]
     public decimal Weight { get; set; }
 
-    [Range(0, 50, ErrorMessage = "Experience must be between 0 and 50 years")]
-    public int Experience { get; set; }
+    // [Range(0, 50, ErrorMessage = "Experience must be between 0 and 50 years")]
+    // public int Experience { get; set; }
     }
 }

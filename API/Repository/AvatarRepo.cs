@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Database;
 using API.DTOs.Avatar;
+using API.Helpers;
 using API.Interface;
+using API.Migrations;
 using API.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,9 +21,33 @@ namespace API.Repository
             
         }
 
-        public async Task<List<Avatar>> GetAllAsync()
+        public async Task<List<Avatar>> GetAllAsync(QueryObject queryObject)
         {
-            return await _context.Avatars.Include(x => x.Skill).ToListAsync();
+            var avatars = _context.Avatars.Include(x => x.Skill).AsQueryable();
+
+            // Apply filters
+            if (!string.IsNullOrWhiteSpace(queryObject.FavouriteFoot))
+            {
+                avatars = avatars.Where(s => s.FavouriteFoot.Contains(queryObject.FavouriteFoot));
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryObject.Role))
+            {
+                avatars = avatars.Where(s => s.Role.Contains(queryObject.Role));
+            }
+
+            // Execute the query to get avatars
+            var avatarList = await avatars.ToListAsync();
+
+            // Apply sorting client-side
+            if (!string.IsNullOrWhiteSpace(queryObject.SortBy) && queryObject.SortBy.Equals("Rating", StringComparison.OrdinalIgnoreCase))
+            {
+                avatarList = queryObject.IsDescending
+                    ? avatarList.OrderByDescending(t => t.Rating).ToList()
+                    : avatarList.OrderBy(t => t.Rating).ToList();
+            }
+
+            return avatarList;
         }
 
         public async Task<Avatar?> GetByIdAsync(int id)
@@ -54,7 +80,7 @@ namespace API.Repository
             avatar.PlayOtherRoles = updateAvatar.PlayOtherRoles;
             avatar.Height = updateAvatar.Height;
             avatar.Weight = updateAvatar.Weight;
-            avatar.Experience = updateAvatar.Experience;
+            //avatar.Experience = updateAvatar.Experience;
 
             await _context.SaveChangesAsync();
             return avatar;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs.Avatar;
+using API.Helpers;
 using API.Interface;
 using API.Mapper;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace API.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll ()
+        public async Task<IActionResult> GetAll ([FromQuery] QueryObject queryObject)
         {
 
             if(!ModelState.IsValid)
@@ -28,7 +29,8 @@ namespace API.Controller
                 return BadRequest(ModelState);
             }
 
-            var avatar = await _avatarRepo.GetAllAsync();
+            var avatar = await _avatarRepo.GetAllAsync(queryObject);
+            
             var avatarDto = avatar.Select(a => a.ToAvatarDto()).ToList();
 
             return Ok(avatarDto);

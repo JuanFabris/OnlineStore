@@ -20,7 +20,8 @@ namespace API.Mapper
                 PlayOtherRoles = avatarModel.PlayOtherRoles,
                 Height = avatarModel.Height,
                 Weight = avatarModel.Weight,
-                Experience = avatarModel.Experience,
+                //Experience = avatarModel.Experience,
+                Rating = avatarModel.Rating,
                 Skills = avatarModel.Skill.Select(x => x.ToSkillDto()).ToList()
             };
         }
@@ -35,7 +36,7 @@ namespace API.Mapper
                 PlayOtherRoles = avatarDto.PlayOtherRoles,
                 Height = avatarDto.Height,
                 Weight = avatarDto.Weight,
-                Experience = avatarDto.Experience,
+                //Experience = avatarDto.Experience,
             };
         }
 
@@ -47,7 +48,7 @@ namespace API.Mapper
                 PlayOtherRoles = updateAvatarDto.PlayOtherRoles,
                 Height = updateAvatarDto.Height,
                 Weight = updateAvatarDto.Weight,
-                Experience = updateAvatarDto.Experience,
+                //Experience = updateAvatarDto.Experience,
             };
         }
     }
