@@ -6,6 +6,7 @@ using API.DTOs.Avatar;
 using API.Helpers;
 using API.Interface;
 using API.Mapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controller
@@ -21,6 +22,7 @@ namespace API.Controller
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll ([FromQuery] QueryObject queryObject)
         {
 
@@ -37,6 +39,8 @@ namespace API.Controller
         }
 
         [HttpGet("{id:int}")]
+        [Authorize]
+
         public async Task<IActionResult> GetById ([FromRoute] int id)
         {
             if(!ModelState.IsValid)
@@ -54,6 +58,8 @@ namespace API.Controller
         }
 
         [HttpPost]
+        [Authorize]
+
         public async Task <IActionResult> Create ([FromBody] CreateAvatarDto avatarDto)
         {
             if(!ModelState.IsValid)
@@ -69,6 +75,8 @@ namespace API.Controller
 
         [HttpPut]
         [Route("{id:int}")]
+        [Authorize]
+
         public async Task<IActionResult> Update ([FromRoute] int id, [FromBody] UpdateAvatarDto updateAvatar)
         {
             if(!ModelState.IsValid)
@@ -88,6 +96,8 @@ namespace API.Controller
 
         [HttpDelete]
         [Route("{id:int}")]
+        [Authorize]
+
         public async Task<IActionResult> Delete ([FromRoute] int id)
         {
             if(!ModelState.IsValid)

@@ -10,11 +10,8 @@ namespace API.Helpers
         public string? FavouriteFoot { get; set; } = string.Empty;
         public string? Role { get; set; } = string.Empty;
         public int? Rating { get; set; }
-
-
         public string? SortBy { get; set; }
         public bool IsDescending { get; set; }
 
-        
     }
 }

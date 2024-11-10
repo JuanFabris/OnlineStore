@@ -37,7 +37,7 @@ namespace API.Models
         public int Reflexes { get; set; }
 
         
-        // Relazioni <3
+        // Relazioni
         public int? AvatarId { get; set; }
         public Avatar? Avatar { get; set; }
 
